@@ -1,0 +1,159 @@
+{%extends 'base.html' %}
+
+
+{%block title%}
+
+Home Page
+{%endblock%}
+
+  {%block content%}
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding: 20px;">
+    <a class="navbar-brand" href="#">Home Page</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+       
+      </ul>
+      <span class="navbar-text row">
+          <div class=" row">
+
+              <h3 style="margin-right: 10px;">Hello, {{request.user.first_name }}</h3>
+              <a class="navbar-brand" style="margin: 0px 50px;" href="{%url 'logout' %}">Logout</a>
+            </div>
+      </span>
+    </div>
+  </nav>
+
+
+   <div class="container-fluid">
+    <div class="row align-items-start" style="margin-top: 60px;">
+      <div class="col"  style="padding-left: 50px; border-right: black 5px  ;border-right-style: solid;">
+        <form method="POST" enctype='multipart/form-data'>
+            {%csrf_token%}
+
+
+            <div class="form-group row ">
+              <label for="InputEmail1"> <b>Email address</b> </label>
+              <div class="col-sm-7">
+                  {{form.email}}
+                </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="fname"><b> First Name</b></label>
+
+              <div class="col-sm-7">                 
+                  {{form.first_name}}
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label for="lname"><b>Last Name</b> </label>
+                <div class="col-sm-7">                    
+                    {{form.last_name}}
+                </div>
+              </div>
+            
+           
+            <!-- <div class="col-md-6"> -->
+
+                
+                <div class="input-group mb-3">
+                    <div class="custom-file " id="profpic" style="margin-top: 20px;">
+                        <label for="id_photo"><b> Change Profile Picture </b></label>
+                        <div class="col-sm-7">  
+                        {{form.photo}}
+                        </div>
+                    </div>
+                </div>
+                <div style="color: red; margin: 20px;">
+                    {{ form.non_field_errors }} 
+                    {{ form.first_name.errors }}
+                    {{ form.last_name.errors }}
+                    
+                  {{ form.email.errors }}
+                    {{ form.password.errors }} 
+                    {{ form.password1.errors }}
+                    
+                   </div>
+              <!-- </div> -->
+              <button id="edit" type="button"  class="btn btn-danger">Edit</button>
+              
+              <div id="button" >
+
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="button" id="cancel" style="margin-left: 50px;" class="btn btn-danger">Cancel</button>
+                </div>
+            <!-- <button id="back" type="button" class="btn btn-danger">Back</button> -->
+
+        </form>
+        
+          
+
+
+      </div>
+      <div class="col align-items-center" style="margin-top: -10px;">
+        <center>
+
+            <b>Your Profile Picture</b> <br>
+            {%if instance.photo %}
+            
+            <img style=" max-width:500px ; margin-top: 50px;" src="{{ instance.photo.url }}" alt="">
+            {%else%}
+            <p>Profile picture not available</p>
+            {%endif%}
+        </center>
+      </div>
+      
+    </div>
+    
+
+
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script>
+        {%if not edit%}
+
+            $("#edit").show();
+            $("#button").hide();
+            
+            $("#profpic").hide()
+
+        {%else%}
+        $("#edit").hide();
+            $("#button").show();
+            
+            $("#profpic").show()
+            $(".form-control-plaintext").attr({'class':'form-control','readonly':false})
+            {%endif%}
+
+
+        $("#edit").click(function(){
+        $("#button").show();
+        $(this).hide();
+        $(".form-control-plaintext").attr({'class':'form-control','readonly':false})
+            $("#profpic").show()
+        });
+
+        $("#cancel").click(function(){
+            $("#button").hide();
+            $("#edit").show();
+            $(".form-control").attr({'class':'form-control-plaintext','readonly':true})
+            $("#profpic").hide()
+        });
+
+
+
+        // console.log( $(".form-control"))
+    </script>
+    <script>
+        if ( window.history.replaceState ) {
+          window.history.replaceState( null, null, window.location.href );
+        }
+        </script>
+        {%endblock%}
